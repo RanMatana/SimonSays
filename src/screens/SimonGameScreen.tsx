@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {SimonButton} from '../components';
 
 const SimonGameScreen = () => {
   const handlePress = (quarter: number) => {
@@ -29,34 +24,27 @@ const SimonGameScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={{color: 'black', fontSize: 40, fontWeight: 'bold'}}>
-          Simon Says
-        </Text>
-      </View>
       <View style={styles.circle}>
         <View style={styles.view_play}>
           <Pressable
             style={styles.btn_play}
             onPress={() => console.log('Start Game')}>
-            <Text style={{color: 'black', fontSize: 14, fontWeight: 'bold'}}>
-              Start Game
-            </Text>
+            <Text style={styles.text}>Start Game</Text>
           </Pressable>
         </View>
-        <TouchableOpacity
+        <SimonButton
           style={[styles.quarter, styles.firstQuarter]}
           onPress={() => handlePress(1)}
         />
-        <TouchableOpacity
+        <SimonButton
           style={[styles.quarter, styles.secondQuarter]}
           onPress={() => handlePress(2)}
         />
-        <TouchableOpacity
+        <SimonButton
           style={[styles.quarter, styles.thirdQuarter]}
           onPress={() => handlePress(3)}
         />
-        <TouchableOpacity
+        <SimonButton
           style={[styles.quarter, styles.fourthQuarter]}
           onPress={() => handlePress(4)}
         />
@@ -72,13 +60,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
   },
-  header: {
-    width: '100%',
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: -50,
-  },
   circle: {
     width: 350,
     height: 350,
@@ -87,7 +68,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 50,
+    marginBottom: 50,
     borderWidth: 25,
     borderColor: 'black',
   },
@@ -127,7 +108,7 @@ const styles = StyleSheet.create({
     width: '45%',
     height: '45%',
     backgroundColor: 'black',
-    zIndex: 2,
+    zIndex: 1,
     borderRadius: 150,
     justifyContent: 'center',
     alignItems: 'center',
@@ -139,6 +120,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 150,
+  },
+  text: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
 });
 
