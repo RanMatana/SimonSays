@@ -9,17 +9,18 @@ const Stack = createStackNavigator();
 
 const App: React.FC = () => {
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="SimonGame"
-            component={SimonGameScreen}
-            options={{title: 'Simon Says'}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <SimonGameScreen />
+    // <Provider store={store}>
+    // <NavigationContainer>
+    //   <Stack.Navigator>
+    //     <Stack.Screen
+    //       name="SimonGame"
+    //       component={SimonGameScreen}
+    //       options={{title: 'Simon Says'}}
+    //     />
+    //   </Stack.Navigator>
+    // </NavigationContainer>
+    // </Provider>
   );
 };
 

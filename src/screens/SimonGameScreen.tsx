@@ -1,35 +1,65 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {SimonButton} from '../components';
-import {pressButton, startGame} from '../store/simonSlice';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
-const colors = ['red', 'green', 'blue', 'yellow'];
-
-const SimonGameScreen: React.FC = () => {
-  const dispatch = useDispatch();
-
-  const onStartGame = () => {
-    dispatch(startGame());
-  };
-
-  const onButtonPress = (color: string) => {
-    dispatch(pressButton(color));
+const SimonGameScreen = () => {
+  const handlePress = (quarter: number) => {
+    switch (quarter) {
+      case 1:
+        console.log('First quarter pressed (12:00-15:00)');
+        break;
+      case 2:
+        console.log('Second quarter pressed (15:00-18:00)');
+        break;
+      case 3:
+        console.log('Third quarter pressed (18:00-21:00)');
+        break;
+      case 4:
+        console.log('Fourth quarter pressed (21:00-24:00)');
+        break;
+      default:
+        break;
+    }
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.buttonsContainer}>
-        {colors.map(color => (
-          <SimonButton
-            key={color}
-            color={color}
-            onPress={() => onButtonPress(color)}
-          />
-        ))}
+      <View style={styles.header}>
+        <Text style={{color: 'black', fontSize: 40, fontWeight: 'bold'}}>
+          Simon Says
+        </Text>
       </View>
-      <View style={styles.startButtonContainer}>
-        <SimonButton color="gray" onPress={onStartGame} />
+      <View style={styles.circle}>
+        <View style={styles.view_play}>
+          <Pressable
+            style={styles.btn_play}
+            onPress={() => console.log('Start Game')}>
+            <Text style={{color: 'black', fontSize: 14, fontWeight: 'bold'}}>
+              Start Game
+            </Text>
+          </Pressable>
+        </View>
+        <TouchableOpacity
+          style={[styles.quarter, styles.firstQuarter]}
+          onPress={() => handlePress(1)}
+        />
+        <TouchableOpacity
+          style={[styles.quarter, styles.secondQuarter]}
+          onPress={() => handlePress(2)}
+        />
+        <TouchableOpacity
+          style={[styles.quarter, styles.thirdQuarter]}
+          onPress={() => handlePress(3)}
+        />
+        <TouchableOpacity
+          style={[styles.quarter, styles.fourthQuarter]}
+          onPress={() => handlePress(4)}
+        />
       </View>
     </View>
   );
@@ -39,17 +69,76 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
-  buttonsContainer: {
-    flex: 2,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  },
-  startButtonContainer: {
-    flex: 1,
+  header: {
+    width: '100%',
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: -50,
+  },
+  circle: {
+    width: 350,
+    height: 350,
+    borderRadius: 250,
+    overflow: 'hidden',
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50,
+    borderWidth: 25,
+    borderColor: 'black',
+  },
+  quarter: {
+    flex: 1,
+    position: 'absolute',
+  },
+  firstQuarter: {
+    backgroundColor: 'red',
+    top: 0,
+    left: 0,
+    width: '50%',
+    height: '50%',
+  },
+  secondQuarter: {
+    backgroundColor: 'green',
+    top: 0,
+    left: '50%',
+    width: '50%',
+    height: '50%',
+  },
+  thirdQuarter: {
+    backgroundColor: 'blue',
+    top: '50%',
+    left: 0,
+    width: '50%',
+    height: '50%',
+  },
+  fourthQuarter: {
+    backgroundColor: 'yellow',
+    top: '50%',
+    left: '50%',
+    width: '50%',
+    height: '50%',
+  },
+  view_play: {
+    width: '45%',
+    height: '45%',
+    backgroundColor: 'black',
+    zIndex: 2,
+    borderRadius: 150,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btn_play: {
+    width: '70%',
+    height: '70%',
+    backgroundColor: '#C0C0C0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 150,
   },
 });
 
