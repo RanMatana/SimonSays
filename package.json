@@ -4,10 +4,20 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "lint": "eslint .",
+    "ios": "react-native run-ios --simulator='iPhone 15 Pro Max'",
+    "ios:he": "react-native run-ios --simulator='iPhone 13'",
+    "ios:en": "react-native run-ios --simulator='iPhone 14'",
+    "ios:both": "yarn ios:he && yarn ios:en",
     "start": "react-native start",
-    "test": "jest"
+    "pod": "cd ios && pod install && cd ..",
+    "test": "jest",
+    "lint": "eslint .",
+    "open": "sh open.sh",
+    "w": "watchman watch-del-all",
+    "g": "yarn && yarn pod && yarn && yarn w && yarn start",
+    "android-clean": "cd android && ./gradlew clean && ./gradlew cleanBuildCache && cd ..",
+    "ios-clean": "cd ios && xcodebuild clean && rm -rf ~/Library/Caches/CocoaPods && rm -rf Pods && rm -rf ~/Library/Developer/Xcode/DerivedData/* && pod cache clean --all && pod deintegrate && pod setup && pod install && cd ..",
+    "project-clean": "rm -rf node_modules && yarn cache clean --force && yarn install"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.11",
