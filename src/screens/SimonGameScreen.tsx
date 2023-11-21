@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
+import {SimonButton} from '../components';
 import {pressButton, startGame} from '../store/simonSlice';
 
 const colors = ['red', 'green', 'blue', 'yellow'];
@@ -18,8 +19,18 @@ const SimonGameScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.buttonsContainer}></View>
-      <View style={styles.startButtonContainer}></View>
+      <View style={styles.buttonsContainer}>
+        {colors.map(color => (
+          <SimonButton
+            key={color}
+            color={color}
+            onPress={() => onButtonPress(color)}
+          />
+        ))}
+      </View>
+      <View style={styles.startButtonContainer}>
+        <SimonButton color="gray" onPress={onStartGame} />
+      </View>
     </View>
   );
 };
