@@ -6,16 +6,13 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {SimonButton} from '../components';
-import {pressButton, selectSimon, startGame} from '../store/simonSlice';
+import {pressButton, startGame} from '../store/simonSlice';
 import {Colors, colors} from '../utils/colors';
 
 const SimonGameScreen = () => {
   const dispatch = useDispatch();
-  const game = useSelector(selectSimon);
-
-  console.log(game);
 
   const onStartGame = () => {
     dispatch(startGame());

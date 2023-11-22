@@ -27,11 +27,13 @@ const simonSlice = createSlice({
     pressButton: (state, action: PayloadAction<string>) => {
       if (state.isPlaying) {
         state.userSequence.push(action.payload);
-        if (state.userSequence.join('') === state.sequence.join('')) {
-          state.sequence.push(getRandomColor());
-          state.userSequence = [];
-        } else {
-          state.isPlaying = false;
+        if (state.userSequence.length === state.sequence.length) {
+          if (state.userSequence.join('') === state.sequence.join('')) {
+            state.sequence.push(getRandomColor());
+            state.userSequence = [];
+          } else {
+            state.isPlaying = false;
+          }
         }
       }
     },
