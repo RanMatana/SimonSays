@@ -1,6 +1,5 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {SimonButton} from '../components';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -8,8 +7,9 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import {useDispatch, useSelector} from 'react-redux';
+import {SimonButton} from '../components';
 import {pressButton, selectSimon, startGame} from '../store/simonSlice';
-import {Colors} from '../utils/colors';
+import {Colors, colors} from '../utils/colors';
 
 const SimonGameScreen = () => {
   const dispatch = useDispatch();
@@ -46,22 +46,14 @@ const SimonGameScreen = () => {
             <Text style={styles.text}>Start Game</Text>
           </Pressable>
         </Animated.View>
-        <SimonButton
-          style={[styles.quarter, styles.firstQuarter]}
-          onPress={() => onButtonPress(Colors.red)}
-        />
-        <SimonButton
-          style={[styles.quarter, styles.secondQuarter]}
-          onPress={() => onButtonPress(Colors.green)}
-        />
-        <SimonButton
-          style={[styles.quarter, styles.thirdQuarter]}
-          onPress={() => onButtonPress(Colors.blue)}
-        />
-        <SimonButton
-          style={[styles.quarter, styles.fourthQuarter]}
-          onPress={() => onButtonPress(Colors.yellow)}
-        />
+        {colors.map((color, index) => (
+          <SimonButton
+            key={index}
+            index={index}
+            color={color}
+            onPress={() => onButtonPress(color)}
+          />
+        ))}
       </View>
     </View>
   );
@@ -86,38 +78,6 @@ const styles = StyleSheet.create({
     borderWidth: 25,
     borderColor: Colors.black,
     backgroundColor: Colors.black,
-  },
-  quarter: {
-    flex: 1,
-    position: 'absolute',
-  },
-  firstQuarter: {
-    backgroundColor: Colors.red,
-    top: 0,
-    left: 0,
-    width: '50%',
-    height: '50%',
-  },
-  secondQuarter: {
-    backgroundColor: Colors.green,
-    top: 0,
-    left: '50%',
-    width: '50%',
-    height: '50%',
-  },
-  thirdQuarter: {
-    backgroundColor: Colors.blue,
-    top: '50%',
-    left: 0,
-    width: '50%',
-    height: '50%',
-  },
-  fourthQuarter: {
-    backgroundColor: Colors.yellow,
-    top: '50%',
-    left: '50%',
-    width: '50%',
-    height: '50%',
   },
   view_play: {
     width: '45%',

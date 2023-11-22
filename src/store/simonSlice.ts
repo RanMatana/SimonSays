@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState} from '.';
+import {colors} from '../utils/colors';
 
 interface SimonState {
   sequence: string[];
@@ -38,7 +39,6 @@ const simonSlice = createSlice({
 });
 
 const getRandomColor = () => {
-  const colors = ['red', 'green', 'blue', 'yellow'];
   const randomIndex = Math.floor(Math.random() * colors.length);
   return colors[randomIndex];
 };
