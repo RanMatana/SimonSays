@@ -1,5 +1,5 @@
 import {StackNavigationProp} from '@react-navigation/stack';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -27,8 +27,21 @@ interface GameScreenProps {
 const GameScreen = ({navigation}: GameScreenProps) => {
   const dispatch = useDispatch();
   const {score, isLoss, sequence} = useSelector(selectSimon);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  console.log(sequence);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (sequence.length > 0) {
+        setCurrentIndex(
+          (prevIndex: number) => (prevIndex + 1) % sequence.length,
+        );
+      } else if (sequence.length === currentIndex) {
+        setCurrentIndex(0);
+      }
+    }, 1200);
+
+    return () => clearInterval(intervalId);
+  }, [currentIndex, sequence.length]);
 
   useEffect(() => {
     if (isLoss) {
@@ -40,7 +53,7 @@ const GameScreen = ({navigation}: GameScreenProps) => {
     dispatch(startGame());
   };
 
-  const onButtonPress = (color: string) => {
+  const handleSound = (color: string) => {
     switch (color) {
       case Colors.red:
         SoundPlayer.playSoundFile('a1', 'mp3');
@@ -58,6 +71,10 @@ const GameScreen = ({navigation}: GameScreenProps) => {
       default:
         break;
     }
+  };
+
+  const onButtonPress = (color: string) => {
+    handleSound(color);
     dispatch(pressButton(color));
   };
 
@@ -91,6 +108,21 @@ const GameScreen = ({navigation}: GameScreenProps) => {
           />
         ))}
       </View>
+      {sequence[currentIndex] && (
+        <Text
+          style={[
+            styles.text,
+            {
+              color: sequence[currentIndex],
+              textDecorationLine: 'underline',
+              backgroundColor: Colors.black,
+              padding: 10,
+              borderRadius: 8,
+            },
+          ]}>
+          {sequence[currentIndex]}
+        </Text>
+      )}
     </View>
   );
 };

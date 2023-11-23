@@ -49,6 +49,13 @@ const simonSlice = createSlice({
         }
       }
     },
+    resetGame: state => {
+      state.sequence = [];
+      state.userSequence = [];
+      state.isPlaying = false;
+      state.isLoss = false;
+      state.score = 0;
+    },
   },
 });
 
@@ -57,7 +64,7 @@ const getRandomColor = () => {
   return colors[randomIndex];
 };
 
-export const {startGame, pressButton} = simonSlice.actions;
+export const {startGame, pressButton, resetGame} = simonSlice.actions;
 
 export const selectSimon = (state: RootState) => state.simon;
 

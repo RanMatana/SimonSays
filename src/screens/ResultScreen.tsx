@@ -1,7 +1,11 @@
-import React, {useState} from 'react';
+import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {ScoreEntry} from '../utils/storage';
+import {useDispatch} from 'react-redux';
+import {RootStackParamList} from '../../App';
 import Modal from '../components/Modal';
+import {resetGame} from '../store/simonSlice';
+import {Colors} from '../utils/colors';
 import {
   BACK_RESULT_SCREEN,
   NUMBER_RESULT_SCREEN,
@@ -9,9 +13,7 @@ import {
   SCORE_RESULT_SCREEN,
   TITLE_RESULT_SCREEN,
 } from '../utils/constants';
-import {Colors} from '../utils/colors';
-import {StackNavigationProp} from '@react-navigation/stack';
-import {RootStackParamList} from '../../App';
+import {ScoreEntry} from '../utils/storage';
 
 type ResultScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -23,8 +25,9 @@ interface ResultScreenProps {
 }
 
 const ResultScreen = ({navigation}: ResultScreenProps) => {
-  const [modalVisible, setModalVisible] = useState<boolean>(true);
+  const dispatch = useDispatch();
 
+  const [modalVisible, setModalVisible] = useState<boolean>(true);
   const [scoreTable, setScoreTable] = useState<ScoreEntry[]>([]);
 
   const renderScoreItem = ({
@@ -46,6 +49,10 @@ const ResultScreen = ({navigation}: ResultScreenProps) => {
       </Text>
     </View>
   );
+
+  useEffect(() => {
+    dispatch(resetGame());
+  }, [dispatch]);
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
