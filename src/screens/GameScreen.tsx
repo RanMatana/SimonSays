@@ -13,6 +13,7 @@ import {SimonButton} from '../components';
 import {pressButton, selectSimon, startGame} from '../store/simonSlice';
 import {Colors, colors} from '../utils/colors';
 import {START_GAME} from '../utils/constants';
+import SoundPlayer from 'react-native-sound-player';
 
 type GameScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -40,6 +41,23 @@ const GameScreen = ({navigation}: GameScreenProps) => {
   };
 
   const onButtonPress = (color: string) => {
+    switch (color) {
+      case Colors.red:
+        SoundPlayer.playSoundFile('a1', 'mp3');
+        break;
+      case Colors.green:
+        SoundPlayer.playSoundFile('b2', 'mp3');
+        break;
+      case Colors.blue:
+        SoundPlayer.playSoundFile('c3', 'mp3');
+        break;
+      case Colors.yellow:
+        SoundPlayer.playSoundFile('d4', 'mp3');
+        break;
+
+      default:
+        break;
+    }
     dispatch(pressButton(color));
   };
 

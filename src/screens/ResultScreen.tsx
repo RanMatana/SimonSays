@@ -1,160 +1,118 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from 'react';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {ScoreEntry} from '../utils/storage';
+import Modal from '../components/Modal';
 import {
-  Button,
-  FlatList,
-  Modal,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {useSelector} from 'react-redux';
-import {selectSimon} from '../store/simonSlice';
+  BACK_RESULT_SCREEN,
+  NUMBER_RESULT_SCREEN,
+  PLAYER_RESULT_SCREEN,
+  SCORE_RESULT_SCREEN,
+  TITLE_RESULT_SCREEN,
+} from '../utils/constants';
 import {Colors} from '../utils/colors';
-import {SCORE_TABLE_KEY} from '../utils/constants';
-import {ScoreEntry, updateScoreTable} from '../utils/storage';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../App';
 
-const ResultScreen = () => {
+type ResultScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'ResultScreen'
+>;
+
+interface ResultScreenProps {
+  navigation: ResultScreenNavigationProp;
+}
+
+const ResultScreen = ({navigation}: ResultScreenProps) => {
   const [modalVisible, setModalVisible] = useState<boolean>(true);
-  const [playerName, setPlayerName] = useState<string>('');
-  const {score} = useSelector(selectSimon);
 
   const [scoreTable, setScoreTable] = useState<ScoreEntry[]>([]);
 
-  const fetchScoreTable = async () => {
-    try {
-      const scoreTableString = await AsyncStorage.getItem(SCORE_TABLE_KEY);
-      const scoreTableData: ScoreEntry[] = scoreTableString
-        ? JSON.parse(scoreTableString)
-        : [];
-
-      setScoreTable(scoreTableData);
-    } catch (error) {
-      console.error('Error fetching score table:', error);
-    }
-  };
-
-  const openModal = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
-  const handleInputChange = (text: string) => {
-    setPlayerName(text);
-  };
-
-  const handleSubmit = async () => {
-    updateScoreTable(playerName, score);
-    await fetchScoreTable();
-    closeModal();
-  };
-
-  const renderScoreItem = ({item}: {item: ScoreEntry}) => (
+  const renderScoreItem = ({
+    item,
+    index,
+  }: {
+    item: ScoreEntry;
+    index: number;
+  }) => (
     <View style={styles.scoreItem}>
-      <Text>{item.name}</Text>
-      <Text>{item.score}</Text>
+      <Text style={styles.text}>
+        {NUMBER_RESULT_SCREEN} {index + 1}
+      </Text>
+      <Text style={styles.text}>
+        {PLAYER_RESULT_SCREEN} {item.name}
+      </Text>
+      <Text style={styles.text}>
+        {SCORE_RESULT_SCREEN} {item.score}
+      </Text>
     </View>
   );
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Button title="Open Modal" onPress={openModal} />
       {!modalVisible && (
         <View style={styles.container}>
-          <Text style={styles.title}>Top 10 Scores</Text>
+          <Text style={[styles.title, {textAlign: 'center'}]}>
+            {TITLE_RESULT_SCREEN}
+          </Text>
           <FlatList
             data={scoreTable}
             keyExtractor={(item, index) => `${item.name}_${index}`}
             renderItem={renderScoreItem}
           />
+          <TouchableOpacity
+            style={styles.btn}
+            hitSlop={10}
+            onPress={() => navigation.goBack()}>
+            <Text style={styles.text}>{BACK_RESULT_SCREEN}</Text>
+          </TouchableOpacity>
         </View>
       )}
-
-      <Modal animationType="slide" transparent={true} visible={modalVisible}>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <View
-            style={{
-              backgroundColor: Colors.white,
-              padding: 20,
-              borderRadius: 10,
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '80%',
-              height: '30%',
-              borderWidth: 1,
-              borderColor: Colors.black,
-            }}>
-            <View style={{width: '80%'}}>
-              <Text
-                style={{
-                  color: Colors.black,
-                  fontWeight: 'bold',
-                  fontSize: 14,
-                  marginBottom: 5,
-                }}>
-                Enter Player Name:
-              </Text>
-              <TextInput
-                style={{
-                  height: 40,
-                  borderColor: Colors.black,
-                  borderWidth: 1,
-                  marginBottom: 10,
-                  padding: 5,
-                  borderRadius: 8,
-                  color: Colors.black,
-                  fontWeight: 'bold',
-                  fontSize: 14,
-                }}
-                onChangeText={handleInputChange}
-                value={playerName}
-              />
-            </View>
-            <TouchableOpacity
-              onPress={handleSubmit}
-              hitSlop={10}
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '80%',
-                height: 50,
-                marginTop: 20,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: Colors.black,
-              }}>
-              <Text>Submut</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      <Modal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        setScoreTable={setScoreTable}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    padding: 16,
-    alignItems: 'center',
+    marginVertical: 50,
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: Colors.black,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: Colors.black,
   },
   scoreItem: {
+    alignSelf: 'center',
+    width: '80%',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: Colors.gray,
+  },
+  btn: {
+    width: '80%',
+    height: 50,
+    position: 'absolute',
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.black,
   },
 });
 
