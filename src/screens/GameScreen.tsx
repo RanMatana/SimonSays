@@ -7,13 +7,13 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
+import SoundPlayer from 'react-native-sound-player';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootStackParamList} from '../../App';
 import {SimonButton} from '../components';
 import {pressButton, selectSimon, startGame} from '../store/simonSlice';
 import {Colors, colors} from '../utils/colors';
 import {START_GAME} from '../utils/constants';
-import SoundPlayer from 'react-native-sound-player';
 
 type GameScreenNavigationProp = StackNavigationProp<
   RootStackParamList,

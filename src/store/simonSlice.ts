@@ -49,9 +49,6 @@ const simonSlice = createSlice({
         }
       }
     },
-    toggleLoss: state => {
-      state.isLoss = !state.isLoss;
-    },
   },
 });
 
@@ -60,7 +57,7 @@ const getRandomColor = () => {
   return colors[randomIndex];
 };
 
-export const {startGame, pressButton, toggleLoss} = simonSlice.actions;
+export const {startGame, pressButton} = simonSlice.actions;
 
 export const selectSimon = (state: RootState) => state.simon;
 
