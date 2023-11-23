@@ -22,7 +22,7 @@ const slice = [
   {top: '50%', left: '50%', width: '50%', height: '50%'},
 ];
 
-const SimonButton: React.FC<SimonButtonProps> = ({index, color, onPress}) => {
+const SimonButton = ({index, color, onPress}: SimonButtonProps) => {
   const {isPlaying} = useSelector(selectSimon);
   const scale = useSharedValue(1);
 

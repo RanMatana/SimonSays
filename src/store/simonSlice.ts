@@ -6,12 +6,16 @@ interface SimonState {
   sequence: string[];
   userSequence: string[];
   isPlaying: boolean;
+  isLoss: boolean;
+  score: number;
 }
 
 const initialState: SimonState = {
   sequence: [],
   userSequence: [],
   isPlaying: false,
+  isLoss: false,
+  score: 0,
 };
 
 const simonSlice = createSlice({
@@ -23,19 +27,30 @@ const simonSlice = createSlice({
       state.userSequence = [];
       state.isPlaying = true;
       state.sequence.push(getRandomColor());
+      state.isLoss = false;
+      state.score = 0;
     },
     pressButton: (state, action: PayloadAction<string>) => {
       if (state.isPlaying) {
-        state.userSequence.push(action.payload);
-        if (state.userSequence.length === state.sequence.length) {
-          if (state.userSequence.join('') === state.sequence.join('')) {
+        const targetSize = state.sequence.length;
+        const isCorrect =
+          state.userSequence.length < targetSize &&
+          state.sequence[state.userSequence.length] === action.payload;
+        if (isCorrect) {
+          state.userSequence.push(action.payload);
+          if (state.userSequence.length === targetSize) {
+            state.score = state.score + 1;
             state.sequence.push(getRandomColor());
             state.userSequence = [];
-          } else {
-            state.isPlaying = false;
           }
+        } else {
+          state.isLoss = true;
+          state.isPlaying = false;
         }
       }
+    },
+    toggleLoss: state => {
+      state.isLoss = !state.isLoss;
     },
   },
 });
@@ -45,7 +60,7 @@ const getRandomColor = () => {
   return colors[randomIndex];
 };
 
-export const {startGame, pressButton} = simonSlice.actions;
+export const {startGame, pressButton, toggleLoss} = simonSlice.actions;
 
 export const selectSimon = (state: RootState) => state.simon;
 

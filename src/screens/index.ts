@@ -1,1 +1,2 @@
-export {default as SimonGameScreen} from './SimonGameScreen';
+export {default as GameScreen} from './GameScreen';
+export {default as ResultScreen} from './ResultScreen';

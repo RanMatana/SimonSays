@@ -1,4 +1,5 @@
-import React from 'react';
+import {StackNavigationProp} from '@react-navigation/stack';
+import React, {useEffect} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -6,13 +7,33 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootStackParamList} from '../../App';
 import {SimonButton} from '../components';
-import {pressButton, startGame} from '../store/simonSlice';
+import {pressButton, selectSimon, startGame} from '../store/simonSlice';
 import {Colors, colors} from '../utils/colors';
+import {START_GAME} from '../utils/constants';
 
-const SimonGameScreen = () => {
+type GameScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'GameScreen'
+>;
+
+interface GameScreenProps {
+  navigation: GameScreenNavigationProp;
+}
+
+const GameScreen = ({navigation}: GameScreenProps) => {
   const dispatch = useDispatch();
+  const {score, isLoss, sequence} = useSelector(selectSimon);
+
+  console.log(sequence);
+
+  useEffect(() => {
+    if (isLoss) {
+      navigation.navigate('ResultScreen');
+    }
+  }, [isLoss, navigation, score]);
 
   const onStartGame = () => {
     dispatch(startGame());
@@ -40,7 +61,7 @@ const SimonGameScreen = () => {
               scale.value = withSequence(withTiming(1.1), withTiming(1));
               onStartGame();
             }}>
-            <Text style={styles.text}>Start Game</Text>
+            <Text style={styles.text}>{START_GAME}</Text>
           </Pressable>
         </Animated.View>
         {colors.map((color, index) => (
@@ -100,4 +121,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SimonGameScreen;
+export default GameScreen;

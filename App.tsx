@@ -2,14 +2,20 @@ import React from 'react';
 import {Provider} from 'react-redux';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import {SimonGameScreen} from './src/screens';
+import {GameScreen, ResultScreen} from './src/screens';
 import {store} from './src/store';
 import {StatusBar} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {GAME_SCREEN_HEADER, RESULT_SCREEN_HEADER} from './src/utils/constants';
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  GameScreen: undefined;
+  ResultScreen: undefined;
+};
 
-const App: React.FC = () => {
+const Stack = createStackNavigator<RootStackParamList>();
+
+const App = () => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <StatusBar barStyle="dark-content" />
@@ -17,9 +23,14 @@ const App: React.FC = () => {
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen
-              name="SimonGame"
-              component={SimonGameScreen}
-              options={{title: 'Simon Says'}}
+              name="GameScreen"
+              component={GameScreen}
+              options={{title: GAME_SCREEN_HEADER}}
+            />
+            <Stack.Screen
+              name="ResultScreen"
+              component={ResultScreen}
+              options={{title: RESULT_SCREEN_HEADER}}
             />
           </Stack.Navigator>
         </NavigationContainer>
